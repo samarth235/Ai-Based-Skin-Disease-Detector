@@ -1,4 +1,5 @@
 import numpy as np
+from disease_mapper import refine_diagnosis
 from tensorflow.keras.models import load_model
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.xception import preprocess_input
@@ -42,4 +43,8 @@ def predict_skin_disease(img_path):
     else:
         risk = "LOW RISK — Monitor condition"
 
-    return best_label.capitalize(), best_conf, risk, top3
+    detailed_name, detail_note = refine_diagnosis(best_label.capitalize(), best_conf)
+
+    final_label = f"{detailed_name}"
+
+    return final_label, best_conf, risk + f" ({detail_note})", top3
