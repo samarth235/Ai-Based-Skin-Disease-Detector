@@ -8,6 +8,7 @@ from tensorflow.keras.models import load_model
 import numpy as np
 from tensorflow.keras.preprocessing import image
 from tensorflow.keras.applications.xception import preprocess_input
+from clinical_logic import confidence_badge, clinical_recommendation
 
 st.set_page_config(page_title="Skin Disease AI", layout="centered")
 
@@ -33,6 +34,21 @@ st.markdown("## 🧠 AI-Powered Skin Disease Detection System")
 st.markdown("##### Clinical Decision Support Tool")
 st.markdown("---")
 
+st.markdown("### 📝 Patient Symptom Questionnaire")
+
+itching = st.checkbox("Itching present?")
+pain = st.checkbox("Pain or tenderness?")
+duration = st.selectbox(
+    "Duration of condition",
+    ["< 1 week", "1–4 weeks", "> 1 month"]
+)
+location = st.selectbox(
+    "Affected area",
+    ["Face", "Scalp", "Body", "Hands / Feet"]
+)
+
+st.markdown("---")
+
 uploaded_file = st.file_uploader(
     "Upload a skin image",
     type=["jpg", "jpeg", "png"]
@@ -44,30 +60,49 @@ if uploaded_file is not None:
     st.image(pil_image, caption="Uploaded Image", width=300)
 
     with tempfile.NamedTemporaryFile(delete=False, suffix=".jpg") as tmp:
-
         if pil_image.mode == "RGBA":
             pil_image = pil_image.convert("RGB")
-
         pil_image.save(tmp.name)
 
         disease, confidence, risk, top3 = predict_skin_disease(tmp.name)
 
     # ==================== DIAGNOSIS CARD ====================
 
-    risk_class = "badge-low"
-    if "HIGH" in risk:
-        risk_class = "badge-high"
-    elif "MODERATE" in risk:
-        risk_class = "badge-mid"
+    badge = confidence_badge(confidence)
+    recommendations = clinical_recommendation(disease)
 
     st.markdown(f"""
     <div class="card">
         <h3>🩺 Diagnosis Summary</h3>
         <p><b>Detected Condition:</b> {disease}</p>
         <p><b>Confidence:</b> {confidence*100:.2f}%</p>
-        <p class="{risk_class}">{risk}</p>
+        <p><b>Confidence Level:</b> {badge}</p>
+        <p>{risk}</p>
     </div>
     """, unsafe_allow_html=True)
+
+    st.markdown("""
+    <div class="card">
+        <h3>📋 Clinical Recommendations</h3>
+    </div>
+    """, unsafe_allow_html=True)
+
+    for r in recommendations:
+        st.write("•", r)
+
+    # ==================== SYMPTOM-AWARE AI REASONING ====================
+
+    if itching and "dermatitis" in disease.lower():
+        st.info("🧠 Reported itching supports an eczema-type condition.")
+
+    if pain and "melanoma" in disease.lower():
+        st.error("⚠ Pain may indicate a serious lesion — urgent medical attention advised.")
+
+    if duration == "> 1 month":
+        st.warning("⏳ Long-standing condition detected — professional evaluation recommended.")
+
+    if location == "Scalp" and "psoriasis" in disease.lower():
+        st.info("🧠 Scalp involvement is commonly associated with psoriasis.")
 
     # ==================== TOP 3 CARD ====================
 
@@ -101,6 +136,7 @@ if uploaded_file is not None:
     """, unsafe_allow_html=True)
 
     st.image(cam_image, channels="BGR")
+
 
 # ==================== FOOTER ====================
 
