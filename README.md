@@ -1,147 +1,121 @@
-🧠 DermAI Diagnostics
+# 🧠 DermAI Diagnostics
 
-DermAI Diagnostics is a skin disease screening system that uses deep learning–based image analysis combined with basic clinical logic to assist in the preliminary identification of common skin diseases.
-The system is designed as an AI-assisted decision support tool, not a replacement for professional medical diagnosis.
+**Skin Disease Screening System using Deep Learning**
 
-📌 Project Overview
+DermAI Diagnostics is a **computer vision–based skin disease screening system** that classifies dermatological conditions from images using a **transfer-learned CNN model**, confidence scoring, and explainable AI.
 
-Skin diseases often exhibit subtle visual patterns that are difficult to identify without expert knowledge.
-This project leverages Convolutional Neural Networks (CNNs) to analyze skin images and predict the most likely disease class along with a confidence score.
+> Designed as an **academic + engineering project** demonstrating applied deep learning in healthcare.
 
-The system integrates:
+---
 
-Deep learning–based image classification
+## 🔍 Problem Statement
 
-Confidence-aware predictions
+Early identification of skin diseases is challenging due to:
 
-Differential diagnosis (Top-3 results)
+* Visual similarity between conditions
+* Limited access to dermatologists
+* Subjective manual diagnosis
 
-Clinical recommendation logic
+This project aims to provide a **preliminary AI-assisted screening tool** using image-based analysis.
 
-Explainable AI using Grad-CAM
+---
 
-A modern Streamlit-based user interface
+## 💡 Key Highlights (For Resume)
 
-🎯 Objectives
+* Implemented **Xception CNN** using transfer learning
+* Achieved **confidence-based multi-class classification**
+* Integrated **Grad-CAM** for explainable AI visualization
+* Built a **clinical decision logic layer** on top of model predictions
+* Developed a **modern Streamlit UI** for end-to-end usability
 
-To automatically classify skin diseases from images
+---
 
-To assist early-stage screening using AI
+## 🧪 Diseases Classified
 
-To provide confidence-based predictions
+* Acne
+* Eczema
+* Psoriasis
+* Ringworm
+* Melanoma
 
-To visualize model attention using explainable AI
+---
 
-To present results in a clinician-friendly format
+## 🧠 Model Architecture
 
-🧪 Diseases Classified
+* **Input:** 299 × 299 RGB skin image
+* **Backbone:** Xception (pre-trained on ImageNet)
+* **Feature Compression:** Global Average Pooling
+* **Classifier:** Fully Connected Dense Layers
+* **Output:** Softmax probability distribution
 
-The system is trained to classify the following skin conditions:
+---
 
-Acne
+## ⚙️ Tech Stack
 
-Eczema
+* **Programming:** Python
+* **Deep Learning:** TensorFlow, Keras
+* **UI:** Streamlit
+* **Explainability:** Grad-CAM
+* **Data Handling:** NumPy, Pandas
+* **Image Processing:** PIL
 
-Psoriasis
+---
 
-Ringworm
+## 📂 Project Structure
 
-Melanoma
+```
+skin-disease-ai/
+├── app.py                  # Streamlit frontend
+├── predict.py              # Model inference logic
+├── gradcam.py              # Explainable AI
+├── clinical_logic.py       # Risk & recommendation logic
+├── models/
+│   ├── skin_model_xception.h5
+│   └── class_indices.npy
+└── README.md
+```
 
-⚠️ Note: Predictions are limited to the diseases present in the training dataset.
+---
 
-🧠 Model Architecture
-🔹 Backbone Network
+## ▶️ How to Run
 
-Xception (Extreme Inception) CNN
+```bash
+pip install -r requirements.txt
+streamlit run app.py
+```
 
-Pre-trained on ImageNet
+---
 
-Fine-tuned for skin disease classification
+## 📊 Output Provided
 
-🔹 Key Architectural Components
+* Predicted disease class
+* Confidence score
+* Risk categorization (Low / Moderate / High)
+* Top-3 probable conditions
+* Visual attention map (Grad-CAM)
 
-Input size: 299 × 299 × 3
+---
 
-Depthwise separable convolutions
+## ❌ Limitations
 
-Global Average Pooling (GAP)
+* Limited number of disease classes
+* Model performance depends on image quality
+* Not a substitute for professional diagnosis
 
-Fully connected dense layers
+---
 
-Softmax output layer for probability distribution
+## 🔮 Future Scope
 
-⚙️ Working Pipeline
+* Training on larger datasets (ISIC / HAM10000)
+* Mobile / web deployment
+* PDF medical report generation
+* Multi-image patient history analysis
 
-User uploads a skin image
+---
 
-Image is resized and preprocessed
+## ⚠️ Disclaimer
 
-Xception extracts deep visual features
+This project is intended **only for educational and research purposes**.
+It does **not** replace certified medical diagnosis.
 
-Global Average Pooling compresses features
-
-Dense layers perform classification
-
-Softmax outputs class probabilities
-
-Top-3 predictions are generated
-
-Risk level and clinical suggestions are displayed
-
-Grad-CAM highlights important image regions
-
-📊 Output Provided
-
-Predicted disease
-
-Confidence score
-
-Top-3 differential diagnosis
-
-Risk assessment
-
-Clinical recommendations
-
-Explainable AI heatmap (Grad-CAM)
-
-🖥️ User Interface
-
-Built using Streamlit
-
-Modern dark-themed medical UI
-
-Step-by-step workflow:
-
-Symptom questionnaire
-
-Image upload
-
-Diagnosis summary
-
-Visual explanation
-
-🧰 Tools & Technologies Used
-Programming & Frameworks
-
-Python
-
-TensorFlow / Keras
-
-Streamlit
-
-NumPy
-
-Pandas
-
-PIL (Image Processing)
-
-Deep Learning
-
-Xception CNN
-
-Transfer Learning
-
-Softmax Classification
-
-Grad-CAM (Explainable AI)
+---
